@@ -11,9 +11,9 @@ body {
     border-width: 0 1px 0 1px;
     border-style: solid;
     max-width: 600px;
-    min-height: calc(100vh - 4em);
+    min-height: calc(100vh - 8em);
     margin: 0 auto;
-    padding: 2em 4em;
+    padding: 2em 4em 6em;
 }
 
 img { margin: 0; }
@@ -30,11 +30,11 @@ img { margin: 0; }
     display: none;
     position: absolute;
     z-index: 9999;
-    left: 80%;
-    top: 50%;
+    left: calc(100% - 1ex);
+    top: 1ex;
     margin: 0;
     padding: 0.25em 0.4em;
-    overflow-x: scroll;
+    width: 10em;
 }
 
 .character:hover .description {
@@ -52,12 +52,15 @@ img { margin: 0; }
 }
 
 .Alice { color: #ff0000; }
-.Bob { color: #ff9900; }
+.Bob { color: #0000ff; }
 .Bob .description {
-    background: #ff0000;
     border: none;
     margin: 0;
     padding: 0;
+    width: 100%;
+    height: 100%;
 }
+.Alice-and-Bob { color: #880088; }
 .Carol { color: #009900; }
-.David { color: #0000ff  }
+.David { color: #ff9900; }
+.Emily-Jones { color: #0088cc; }

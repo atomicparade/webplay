@@ -5,6 +5,10 @@
 
 @~<p style="text-align: center;">[img!test.png A test image]</p>
 
+# Groups must be defined before their individual components.
+@Alice and Bob: Often found together, sometimes with their friends Carol and
+David.
+
 @Alice: Bob, Carol, and David's friend, Alice.
 
 @Bob: [img!bob.png A picture of Bob]
@@ -12,6 +16,8 @@
 @Carol: Alice, Bob, and David's friend, Carol.
 
 @David: Alice, Bob, and Carol's friend, David.
+
+@Emily Jones: Always use Emily Jones' full name.
 
 EXT. Just outside the doors of a mall.
 
@@ -33,4 +39,19 @@ Alice and Bob wave at Carol and David.
 
 Alice and Bob, together: Hello, Carol and David!
 
-@~<p style="text-align: right;">Carol and David wave back.</p>
+@~<p style="text-align: right;">
+Right-aligned<br>
+paragraph.
+</p>
+
+Carol and David wave back.
+
+Emily Jones parachutes onto the scene.
+
+Emily Jones: Hello, everyone! I'm Emily Jones. Nice to meet you!
+
+Alice: Hello, Emily Jones! I'm Alice. Let's be friends.
+
+@Alice: Bob, Carol, and David's friend, Alice. Now also Emily Jones' friend.
+
+Alice is now Emily Jones' friend.

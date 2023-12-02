@@ -19,6 +19,8 @@ RE_DIALOGUE = re.compile(r"^([^:]+):\s*(.+)$")
 RE_IMG = re.compile(r"\[img!(\S+) (.+?)\]")
 RE_IMG_SUB = r'<img src="\1" alt="\2">'
 
+RE_NON_CLASS_IDENTIFIER = re.compile(r"[^a-z0-9_-]", flags=re.IGNORECASE)
+
 
 def print_header() -> None:
     lang = f' lang="{LANG}"' if LANG else ""
@@ -44,6 +46,18 @@ def print_footer() -> None:
         """</body>
 </html>"""
     )
+
+
+def make_replacements(text: str) -> str:
+    if len(CHARACTERS) > 0:
+        pattern = "|".join(map(lambda name: rf"\b{name}\b", CHARACTERS.keys()))
+        text = re.sub(pattern, lambda match: CHARACTERS[match.group()], text)
+    text = RE_IMG.sub(RE_IMG_SUB, text)
+    return text
+
+
+def make_class_name(name: str) -> str:
+    return RE_NON_CLASS_IDENTIFIER.sub("-", name)
 
 
 def process_line(line: str) -> None:
@@ -90,22 +104,22 @@ def process_line(line: str) -> None:
     if (not match_found) and match:
         match_found = True
         output = match.group(1)
-        # TODO: Don't recurse if a description contains another character's name
-        for char_name, char_description in CHARACTERS.items():
-            output = output.replace(char_name, char_description)
-        output = RE_IMG.sub(RE_IMG_SUB, output)
+        output = make_replacements(output)
 
     match = RE_CHARACTER.search(line)
     if (not match_found) and match:
         match_found = True
         name = match.group(1)
         description = match.group(2)
-        description = rf'<span class="character {name}">{name}<span class="description">{description}</span></span>'
-        if name in CHARACTERS:
-            print(f"Warning: Character {name} is defined twice", file=sys.stderr)
-        else:
-            description = RE_IMG.sub(RE_IMG_SUB, description)
-            CHARACTERS[name] = description
+        description = (
+            f'<span class="character {make_class_name(name)}">'
+            f"{name}"
+            f'<span class="description">{description}</span>'
+            "</span>"
+        )
+
+        description = RE_IMG.sub(RE_IMG_SUB, description)
+        CHARACTERS[name] = description
 
     match = RE_DIALOGUE.search(line)
     if (not match_found) and match:
@@ -114,28 +128,20 @@ def process_line(line: str) -> None:
         dialogue = match.group(2)
 
         name_part = name
-        # TODO: Don't recurse if a description contains another character's name
-        for char_name, char_description in CHARACTERS.items():
-            name_part = name_part.replace(char_name, char_description)
+        name_part = make_replacements(name_part)
         name_part = f'<span class="speaker">{name_part}:</span>'
 
         dialogue_part = f'<span class="dialogue">{dialogue}</span>'
-        # TODO: Don't recurse if a description contains another character's name
-        for char_name, char_description in CHARACTERS.items():
-            dialogue_part = dialogue_part.replace(char_name, char_description)
+        dialogue_part = make_replacements(dialogue_part)
         dialogue_part = RE_IMG.sub(RE_IMG_SUB, dialogue_part)
 
-        output = name_part + dialogue_part
+        output = f"<p>{name_part}{dialogue_part}</p>"
 
-    # Default = note
+    # Default = notes
     if not match_found:
         match_found = True
         output = f'<p class="notes">{line}</p>'
-
-        # TODO: Don't recurse if a description contains another character's name
-        for char_name, char_description in CHARACTERS.items():
-            output = output.replace(char_name, char_description)
-        output = RE_IMG.sub(RE_IMG_SUB, output)
+        output = make_replacements(output)
 
     if output:
         # Before echoing anything:
