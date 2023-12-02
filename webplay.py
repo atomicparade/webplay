@@ -40,7 +40,7 @@ def print_header() -> None:
         print(f"""<link rel="stylesheet" href="{css_href}">""")
 
     for js_src in JS_SRC:
-        print(f"""<script type="text/javascript" src="{js_src}"></script>""")
+        print(f"""<script src="{js_src}"></script>""")
 
     print("""<body>""")
 
