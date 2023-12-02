@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+
+"""This program generates a webpage for a play written in a text file."""
+
 import re
 import sys
 
@@ -23,6 +26,7 @@ RE_NON_CLASS_IDENTIFIER = re.compile(r"[^a-z0-9_-]", flags=re.IGNORECASE)
 
 
 def print_header() -> None:
+    """Print the beginning of the HTML document."""
     lang = f' lang="{LANG}"' if LANG else ""
 
     print(
@@ -42,6 +46,7 @@ def print_header() -> None:
 
 
 def print_footer() -> None:
+    """Print the end of the HTML document."""
     print(
         """</body>
 </html>"""
@@ -49,6 +54,7 @@ def print_footer() -> None:
 
 
 def make_replacements(text: str) -> str:
+    """Add HTML classes and descriptions to character names."""
     if len(CHARACTERS) > 0:
         pattern = "|".join(map(lambda name: rf"\b{name}\b", CHARACTERS.keys()))
         text = re.sub(pattern, lambda match: CHARACTERS[match.group()], text)
@@ -57,10 +63,14 @@ def make_replacements(text: str) -> str:
 
 
 def make_class_name(name: str) -> str:
+    """Transform a character name into a CSS class name-friendly format."""
     return RE_NON_CLASS_IDENTIFIER.sub("-", name)
 
 
+# pylint: disable=global-statement
 def process_line(line: str) -> None:
+    """Process a character description or line of content."""
+
     global HEADER_COMPLETE, TITLE
 
     # Pattern-match the line
@@ -153,10 +163,14 @@ def process_line(line: str) -> None:
 
 
 def print_help() -> None:
+    """Displays basic information about running the program."""
     print(f"""Usage: {sys.argv[0]} [-c CSS_HREF...] [-s JS_SRC...] [-l HTML_LANG]""")
 
 
+# pylint: disable=global-statement, too-many-branches
 def main() -> None:
+    """Main function for the program."""
+
     global LANG
 
     line = ""
