@@ -1,13 +1,19 @@
 # This is a comment.
 # It will not be included in the output.
 
-!Test Play
+@!Example
 
-[img!test.png A test image]
+@~<p style="text-align: center;">[img!test.png A test image]</p>
 
-@Alice: Alice's description.
+@Alice: Bob, Carol, and David's friend, Alice.
 
 @Bob: [img!bob.png A picture of Bob]
+
+@Carol: Alice, Bob, and David's friend, Carol.
+
+@David: Alice, Bob, and Carol's friend, David.
+
+EXT. Just outside the doors of a mall.
 
 Alice:
     Hello,
@@ -20,3 +26,11 @@ Alice
 Bob:
     Hello,
     Alice!
+
+Carol and David exit the mall doors.
+
+Alice and Bob wave at Carol and David.
+
+Alice and Bob, together: Hello, Carol and David!
+
+@~<p style="text-align: right;">Carol and David wave back.</p>

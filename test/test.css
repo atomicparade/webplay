@@ -1,0 +1,63 @@
+html {
+    background: #dddddd;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #ffffff;
+    color: #000000;
+    font: 1.2em monospace;
+    border-width: 0 1px 0 1px;
+    border-style: solid;
+    max-width: 600px;
+    min-height: calc(100vh - 4em);
+    margin: 0 auto;
+    padding: 2em 4em;
+}
+
+img { margin: 0; }
+
+.character {
+    text-decoration: underline;
+    position: relative;
+}
+
+.character .description {
+    background: #dddddd;
+    color: #000000;
+    border: 1px solid #000000;
+    display: none;
+    position: absolute;
+    z-index: 9999;
+    left: 80%;
+    top: 50%;
+    margin: 0;
+    padding: 0.25em 0.4em;
+    overflow-x: scroll;
+}
+
+.character:hover .description {
+    display: block;
+}
+
+.notes {
+    font-style: italic;
+    margin-left: 6em;
+}
+
+.speaker {
+    display: inline-block;
+    width: 6em;
+}
+
+.Alice { color: #ff0000; }
+.Bob { color: #ff9900; }
+.Bob .description {
+    background: #ff0000;
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+.Carol { color: #009900; }
+.David { color: #0000ff  }

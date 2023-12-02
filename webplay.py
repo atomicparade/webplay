@@ -1,18 +1,31 @@
 #!/usr/bin/env python3
+import re
 import sys
 
 
+LANG = None
 TITLE = "Play"
 CSS_HREF: list[str] = []
 JS_SRC: list[str] = []
 HEADER_COMPLETE = False
 CHARACTERS: dict[str, str] = {}
 
+RE_H2 = re.compile(r"^@!!(.+)$")
+RE_H1 = re.compile(r"^@!(.+)$")
+RE_RAW = re.compile(r"^@~(.+)$")
+RE_CHARACTER = re.compile(r"^@([^:]+):\s*(.+)$")
+RE_DIALOGUE = re.compile(r"^([^:]+):\s*(.+)$")
+
+RE_IMG = re.compile(r"\[img!(\S+) (.+?)\]")
+RE_IMG_SUB = r'<img src="\1" alt="\2">'
+
 
 def print_header() -> None:
+    lang = f' lang="{LANG}"' if LANG else ""
+
     print(
         f"""<!DOCTYPE html>
-<html>
+<html{lang}>
 <head>
 <title>{TITLE}</title>"""
     )
@@ -34,26 +47,118 @@ def print_footer() -> None:
 
 
 def process_line(line: str) -> None:
-    global HEADER_COMPLETE
+    global HEADER_COMPLETE, TITLE
 
-    # Before echoing anything:
-    if not HEADER_COMPLETE:
-        print_header()
-        HEADER_COMPLETE = True
+    # Pattern-match the line
+    #   @!TEXT
+    #       Output: <h1>TEXT</h1>
+    #   @!!TEXT
+    #       Output: <h2>TEXT</h2>
+    #   @~TEXT
+    #       Output: TEXT (no automatic <p>)
+    #   @NAME: TEXT
+    #       Description of a character
+    #       If a character by this name already exists, throw an error
+    #       No output
+    #       Replace all occurrences of the character's name (case-sensitive) with
+    #           <span class="character NAME">NAME<span class="description">TEXT</span></span>
+    #       Make all occurrences of the character's name show TEXT on hover
+    #   NAME: TEXT
+    #       Output: <p><span class="speaker">NAME:</span><span class="dialogue">TEXT</span></p>
+    #   DEFAULT
+    #       Output: <p class="notes">TEXT</p>
 
-    print(line)
+    match_found = False
+    output = None
+
+    match = RE_H2.search(line)
+    if match:
+        match_found = True
+        text = match.group(1)
+        output = f"<h2>{text}</h2>"
+
+    match = RE_H1.search(line)
+    if (not match_found) and match:
+        match_found = True
+        text = match.group(1)
+        output = f"<h1>{text}</h1>"
+
+        if TITLE == "Play":
+            TITLE = text
+
+    match = RE_RAW.search(line)
+    if (not match_found) and match:
+        match_found = True
+        output = match.group(1)
+        # TODO: Don't recurse if a description contains another character's name
+        for char_name, char_description in CHARACTERS.items():
+            output = output.replace(char_name, char_description)
+        output = RE_IMG.sub(RE_IMG_SUB, output)
+
+    match = RE_CHARACTER.search(line)
+    if (not match_found) and match:
+        match_found = True
+        name = match.group(1)
+        description = match.group(2)
+        description = rf'<span class="character {name}">{name}<span class="description">{description}</span></span>'
+        if name in CHARACTERS:
+            print(f"Warning: Character {name} is defined twice", file=sys.stderr)
+        else:
+            description = RE_IMG.sub(RE_IMG_SUB, description)
+            CHARACTERS[name] = description
+
+    match = RE_DIALOGUE.search(line)
+    if (not match_found) and match:
+        match_found = True
+        name = match.group(1)
+        dialogue = match.group(2)
+
+        name_part = name
+        # TODO: Don't recurse if a description contains another character's name
+        for char_name, char_description in CHARACTERS.items():
+            name_part = name_part.replace(char_name, char_description)
+        name_part = f'<span class="speaker">{name_part}:</span>'
+
+        dialogue_part = f'<span class="dialogue">{dialogue}</span>'
+        # TODO: Don't recurse if a description contains another character's name
+        for char_name, char_description in CHARACTERS.items():
+            dialogue_part = dialogue_part.replace(char_name, char_description)
+        dialogue_part = RE_IMG.sub(RE_IMG_SUB, dialogue_part)
+
+        output = name_part + dialogue_part
+
+    # Default = note
+    if not match_found:
+        match_found = True
+        output = f'<p class="notes">{line}</p>'
+
+        # TODO: Don't recurse if a description contains another character's name
+        for char_name, char_description in CHARACTERS.items():
+            output = output.replace(char_name, char_description)
+        output = RE_IMG.sub(RE_IMG_SUB, output)
+
+    if output:
+        # Before echoing anything:
+        if not HEADER_COMPLETE:
+            print_header()
+            HEADER_COMPLETE = True
+
+        print(output)
 
 
 def print_help() -> None:
-    print(f"""Usage: {sys.argv[0]} [-c CSS_HREF...] [-s JS_SRC...]""")
+    print(f"""Usage: {sys.argv[0]} [-c CSS_HREF...] [-s JS_SRC...] [-l HTML_LANG]""")
 
 
 def main() -> None:
+    global LANG
+
     line = ""
 
     if len(sys.argv) > 1:
         getting_css_paths = False
         getting_js_paths = False
+        getting_lang = False
 
         for arg in sys.argv[1:]:
             if arg in ["-h", "--help"]:
@@ -62,16 +167,26 @@ def main() -> None:
             elif arg == "-c":
                 getting_css_paths = True
                 getting_js_paths = False
+                getting_lang = False
                 continue
             elif arg == "-s":
                 getting_css_paths = False
                 getting_js_paths = True
+                getting_lang = False
+                continue
+            elif arg == "-l":
+                getting_css_paths = False
+                getting_js_paths = False
+                getting_lang = True
                 continue
 
             if getting_css_paths:
                 CSS_HREF.append(arg)
             elif getting_js_paths:
                 JS_SRC.append(arg)
+            elif getting_lang:
+                LANG = arg
+                getting_lang = False
             else:
                 print(f"Unknown argument {arg}", file=sys.stderr)
                 sys.exit(1)
