@@ -141,7 +141,7 @@ def process_line(line: str) -> None:
         name_part = make_replacements(name_part)
         name_part = f'<span class="speaker">{name_part}:</span>'
 
-        dialogue_part = f'<span class="lines">{dialogue}</span>'
+        dialogue_part = f'<span class="line">{dialogue}</span>'
         dialogue_part = make_replacements(dialogue_part)
         dialogue_part = RE_IMG.sub(RE_IMG_SUB, dialogue_part)
 
