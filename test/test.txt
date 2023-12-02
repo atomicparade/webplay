@@ -1,0 +1,15 @@
+# This is a comment. It will not be included in the output.
+
+!Test Play
+
+[img!test.png A test image]
+
+@Alice: Alice's description.
+
+@Bob: [img!bob.png A picture of Bob]
+
+Alice: Hello, Bob!
+
+Alice <em>waves</em> to Bob.
+
+Bob: Hello, Alice!
