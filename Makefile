@@ -1,5 +1,5 @@
 test:
-	python3 webplay.py <test/test.txt -c test.css -s test.js >test/test.html
+	./webplay.py -c test.css -s test.js <test/test.txt >test/test.html
 
 lint:
 	black webplay.py
