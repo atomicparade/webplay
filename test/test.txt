@@ -3,13 +3,13 @@
 
 @!Example
 
-@~<p style="text-align: center;">[img!test.png A test image]</p>
+@!!Act I
 
 # Groups must be defined before their individual components.
 @Alice and Bob: Often found together, sometimes with their friends Carol and
 David.
 
-@Alice: Bob, Carol, and David's friend, Alice.
+@Alice: Often found with Bob. Carol and David's friend.
 
 @Bob: [img!bob.png A picture of Bob]
 
@@ -17,21 +17,8 @@ David.
 
 @David: Alice, Bob, and Carol's friend, David.
 
-@Emily Jones: Always use Emily Jones' full name.
-
-EXT. Just outside the doors of a mall.
-
-Alice:
-    Hello,
-    Bob!
-
-Alice
-    <em>waves</em>
-    at Bob.
-
-Bob:
-    Hello,
-    Alice!
+EXT. Alice and Bob are standing outside, near the doors of a mall. Alice is
+looking through the shopping bags that Bob is holding.
 
 Carol and David exit the mall doors.
 
@@ -39,19 +26,40 @@ Alice and Bob wave at Carol and David.
 
 Alice and Bob, together: Hello, Carol and David!
 
+Carol and David wave back.
+
+Carol: Hello, Alice and Bob! I hope you've both been doing well. How was your
+        trip?
+
 @~<p style="text-align: right;">
 Right-aligned<br>
 paragraph.
 </p>
 
-Carol and David wave back.
+Bob: We had a great time visiting our family. We were supposed to get back
+yesterday morning, but our flight was delayed three times and we got home at
+nearly midnight.
+
+David: That sounds exhausting!
+
+Alice: I'm just glad to be home.
+
+@~<p style="text-align: center;">[img!test.png A test image]</p>
+
+@!!Act II
+
+@Emily Jones: Always use Emily Jones' full name.
 
 Emily Jones parachutes onto the scene.
 
-Emily Jones: Hello, everyone! I'm Emily Jones. Nice to meet you!
+Emily Jones: Hello, everyone! I'm Emily Jones. Nice to meet you! Isn't it a
+    wonderful day outside?
 
 Alice: Hello, Emily Jones! I'm Alice. Let's be friends.
 
-@Alice: Bob, Carol, and David's friend, Alice. Now also Emily Jones' friend.
+@Alice: Often found with Bob. Carol and David's friend. Now also Emily Jones'
+friend.
+
+@Emily Jones: Always use Emily Jones' full name. Now also Alice's friend.
 
 Alice is now Emily Jones' friend.

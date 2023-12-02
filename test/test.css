@@ -18,15 +18,21 @@ body {
 
 img { margin: 0; }
 
+h1,
+h2 {
+    text-align: center;
+}
+
 .character {
     text-decoration: underline;
     position: relative;
 }
 
 .character .description {
-    background: #dddddd;
+    background: #fcf3d6;
     color: #000000;
     border: 1px solid #000000;
+    font-style: italic;
     display: none;
     position: absolute;
     z-index: 9999;
@@ -34,7 +40,8 @@ img { margin: 0; }
     top: 1ex;
     margin: 0;
     padding: 0.25em 0.4em;
-    width: 10em;
+    text-overflow: ellipsis;
+    width: 14em;
 }
 
 .character:hover .description {
@@ -46,9 +53,9 @@ img { margin: 0; }
     margin-left: 6em;
 }
 
-.speaker {
-    display: inline-block;
-    width: 6em;
+.dialogue {
+    display: grid;
+    grid-template-columns: 6em auto;
 }
 
 .Alice { color: #ff0000; }
